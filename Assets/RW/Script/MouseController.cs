@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MouseController : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class MouseController : MonoBehaviour
 
     private uint coins = 0;
     public Text coinsCollectedLabel;
+
+    public Button restartButton;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +49,11 @@ public class MouseController : MonoBehaviour
 
         UpdateGroundedStatus();
         AdjustJetpack(jetpackActive);
+
+        if (isDead && isGrounded)
+        {
+            restartButton.gameObject.SetActive(true);
+        }
     }
 
     void UpdateGroundedStatus()
@@ -91,6 +99,11 @@ public class MouseController : MonoBehaviour
         coins++;
         coinsCollectedLabel.text = coins.ToString();
         Destroy(coinCollider.gameObject);
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene("RocketMouse");
     }
 
     // Update is called once per frame
