@@ -6,9 +6,16 @@ using UnityEngine.SceneManagement;
 
 public class MouseController : MonoBehaviour
 {
-    public float jetpackForce = 75.0f;
-    public float forwardMovementSpeed = 3.0f;
+    private float jetpackForce = 0.0f;
+    private float forwardMovementSpeed = 0.0f;
     private Rigidbody2D playerRigidbody;
+    private bool gameStarted = false;
+
+    private float startTime;
+    private float targetSpeed;
+    public float maxSpeed = 10.0f;
+    public float initialSpeed = 3.0f;
+    public float speedIncreaseDuration = 90.0f;
 
     public Transform groundCheckTransform;
     private bool isGrounded;
@@ -22,37 +29,58 @@ public class MouseController : MonoBehaviour
     public Text coinsCollectedLabel;
 
     public Button restartButton;
+    public Button startButton;
 
     // Start is called before the first frame update
     void Start()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
         mouseAnimator = GetComponent<Animator>();
+        jetpackForce = 0.0f;
+        forwardMovementSpeed = 0.0f;
+    }
+
+    public void StartGame()
+    {
+        jetpackForce = 75.0f;
+        forwardMovementSpeed = 3.0f;
+        startTime = Time.time;
+        targetSpeed = forwardMovementSpeed;
+
+        startButton.gameObject.SetActive(false);
+        gameStarted = true;
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene("RocketMouse");
     }
 
     void FixedUpdate() 
     {
-        bool jetpackActive = Input.GetButton("Fire1");
-        jetpackActive = jetpackActive && !isDead;
+        if (gameStarted) {
+            bool jetpackActive = Input.GetButton("Fire1");
+            jetpackActive = jetpackActive && !isDead;
 
-        if (jetpackActive)
-        {
-            playerRigidbody.AddForce(new Vector2(0, jetpackForce));
-        }
+            if (jetpackActive)
+            {
+                playerRigidbody.AddForce(new Vector2(0, jetpackForce));
+            }
 
-        if (!isDead)
-        {
-            Vector2 newVelocity = playerRigidbody.velocity;
-            newVelocity.x = forwardMovementSpeed;
-            playerRigidbody.velocity = newVelocity;
-        }
+            if (!isDead)
+            {
+                Vector2 newVelocity = playerRigidbody.velocity;
+                newVelocity.x = forwardMovementSpeed;
+                playerRigidbody.velocity = newVelocity;
+            }
 
-        UpdateGroundedStatus();
-        AdjustJetpack(jetpackActive);
+            UpdateGroundedStatus();
+            AdjustJetpack(jetpackActive);
 
-        if (isDead && isGrounded)
-        {
-            restartButton.gameObject.SetActive(true);
+            if (isDead && isGrounded)
+            {
+                restartButton.gameObject.SetActive(true);
+            }
         }
     }
 
@@ -101,14 +129,18 @@ public class MouseController : MonoBehaviour
         Destroy(coinCollider.gameObject);
     }
 
-    public void RestartGame()
-    {
-        SceneManager.LoadScene("RocketMouse");
-    }
-
     // Update is called once per frame
     void Update()
     {
-        
+        float elapsedTime = Time.time - startTime;
+
+        if (elapsedTime <= speedIncreaseDuration)
+        {
+            forwardMovementSpeed = Mathf.Lerp(initialSpeed, maxSpeed, elapsedTime / speedIncreaseDuration);
+        }
+        else
+        {
+            forwardMovementSpeed = maxSpeed;
+        }
     }
 }
