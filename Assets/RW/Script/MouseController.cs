@@ -39,13 +39,15 @@ public class MouseController : MonoBehaviour
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
         mouseAnimator = GetComponent<Animator>();
+        AdjustJetpack(false);
+
         jetpackForce = 0.0f;
         forwardMovementSpeed = 0.0f;
     }
 
     public void StartGame()
     {
-        jetpackForce = 25.0f;
+        jetpackForce = 20.0f;
         forwardMovementSpeed = 5f;
         startTime = Time.time;
         targetSpeed = forwardMovementSpeed;
@@ -112,11 +114,11 @@ public class MouseController : MonoBehaviour
         jetpackEmission.enabled = !isGrounded;
         if (jetpackActive)
         {
-            jetpackEmission.rateOverTime = 300.0f;
+            jetpackEmission.rateOverTime = 75.0f;
         }
         else
         {
-            jetpackEmission.rateOverTime = 75.0f;
+            jetpackEmission.rateOverTime = 0.0f;
         }
     }
 
