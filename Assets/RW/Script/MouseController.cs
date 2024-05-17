@@ -28,6 +28,9 @@ public class MouseController : MonoBehaviour
     private uint coins = 0;
     public Text coinsCollectedLabel;
 
+    private uint metter = 0;
+    public Text metterLabel;
+
     public Button restartButton;
     public Button startButton;
 
@@ -42,13 +45,27 @@ public class MouseController : MonoBehaviour
 
     public void StartGame()
     {
-        jetpackForce = 75.0f;
-        forwardMovementSpeed = 3.0f;
+        jetpackForce = 25.0f;
+        forwardMovementSpeed = 5f;
         startTime = Time.time;
         targetSpeed = forwardMovementSpeed;
 
         startButton.gameObject.SetActive(false);
+        StartCoroutine(UpdateMetterLabel());
         gameStarted = true;
+    }
+
+    IEnumerator UpdateMetterLabel()
+    {
+        while (true)
+        {
+            // Attendre 0.1 seconde
+            yield return new WaitForSeconds(0.1f);
+            
+            // Ajouter 5 à metter et mettre à jour le label
+            metter += 5;
+            metterLabel.text = metter.ToString();
+        }
     }
 
     public void RestartGame()

@@ -8,17 +8,20 @@ public class GeneratorScript : MonoBehaviour
     public List<GameObject> currentRooms;
     private float screenWidthInPoints;
 
-    public GameObject[] availableObjects;
-    public List<GameObject> objects;
+    public GameObject[] availableObstacles;
+    public GameObject[] availableCoins;
 
-    public float objectsMinDistance = 5.0f;
-    public float objectsMaxDistance = 10.0f;
+    public List<GameObject> currentObstacles;
+    public List<GameObject> currentCoins;
+
+    public float objectsMinDistance = 0.0f;
+    public float objectsMaxDistance = 0.0f;
 
     public float objectsMinY = -1.4f;
     public float objectsMaxY = 1.4f;
 
-    public float objectsMinRotation = -45.0f;
-    public float objectsMaxRotation = 45.0f;
+    public float obstaclesMinRotation = -45.0f;
+    public float obstaclesMaxRotation = 45.0f;
 
     private IEnumerator GeneratorCheck()
     {
@@ -30,7 +33,6 @@ public class GeneratorScript : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         float height = 2.0f * Camera.main.orthographicSize;
@@ -87,19 +89,30 @@ public class GeneratorScript : MonoBehaviour
         }
     }
 
-    void AddObject(float lastObjectX)
+    void AddObstacle(float lastObjectX)
     {
-        int randomIndex = Random.Range(0, availableObjects.Length);
-        GameObject obj = (GameObject)Instantiate(availableObjects[randomIndex]);
+        int randomIndex = Random.Range(0, availableObstacles.Length);
+        GameObject obstacle = (GameObject)Instantiate(availableObstacles[randomIndex]);
         float objectPositionX = lastObjectX + Random.Range(objectsMinDistance, objectsMaxDistance);
         float randomY = Random.Range(objectsMinY, objectsMaxY);
 
-        obj.transform.position = new Vector3(objectPositionX,randomY,0); 
+        obstacle.transform.position = new Vector3(objectPositionX, randomY, 0);
+        float rotation = Random.Range(obstaclesMinRotation, obstaclesMaxRotation);
+        obstacle.transform.rotation = Quaternion.Euler(Vector3.forward * rotation);
 
-        float rotation = Random.Range(objectsMinRotation, objectsMaxRotation);
+        currentObstacles.Add(obstacle);
+    }
 
-        obj.transform.rotation = Quaternion.Euler(Vector3.forward * rotation);
-        objects.Add(obj);            
+    void AddCoin(float lastObjectX)
+    {
+        int randomIndex = Random.Range(0, availableCoins.Length);
+        GameObject coin = (GameObject)Instantiate(availableCoins[randomIndex]);
+        float objectPositionX = lastObjectX + Random.Range(objectsMinDistance, objectsMaxDistance);
+        float randomY = Random.Range(objectsMinY, objectsMaxY);
+
+        coin.transform.position = new Vector3(objectPositionX, randomY, 0);
+
+        currentCoins.Add(coin);
     }
 
     void GenerateObjectsIfRequired()
@@ -110,32 +123,54 @@ public class GeneratorScript : MonoBehaviour
         float farthestObjectX = 0;
 
         List<GameObject> objectsToRemove = new List<GameObject>();
-        foreach (var obj in objects)
+        foreach (var obj in currentObstacles)
         {
             float objX = obj.transform.position.x;
             farthestObjectX = Mathf.Max(farthestObjectX, objX);
 
-            if (objX < removeObjectsX) 
-            {           
+            if (objX < removeObjectsX)
+            {
                 objectsToRemove.Add(obj);
             }
         }
         foreach (var obj in objectsToRemove)
         {
-            objects.Remove(obj);
+            currentObstacles.Remove(obj);
+            Destroy(obj);
+        }
+
+        objectsToRemove.Clear();
+
+        foreach (var obj in currentCoins)
+        {
+            float objX = obj.transform.position.x;
+            farthestObjectX = Mathf.Max(farthestObjectX, objX);
+
+            if (objX < removeObjectsX)
+            {
+                objectsToRemove.Add(obj);
+            }
+        }
+        foreach (var obj in objectsToRemove)
+        {
+            currentCoins.Remove(obj);
             Destroy(obj);
         }
 
         if (farthestObjectX < addObjectX)
         {
-            AddObject(farthestObjectX);
+            if (Random.value > 0.5f)
+            {
+                AddObstacle(farthestObjectX);
+            }
+            else
+            {
+                AddCoin(farthestObjectX);
+            }
         }
     }
 
-
-    // Update is called once per frame
     void Update()
     {
-        
     }
 }
