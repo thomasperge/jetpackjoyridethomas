@@ -14,8 +14,8 @@ public class GeneratorScript : MonoBehaviour
     public List<GameObject> currentObstacles;
     public List<GameObject> currentCoins;
 
-    public float objectsMinDistance = 0.0f;
-    public float objectsMaxDistance = 0.0f;
+    public float objectsMinDistance = 2.0f;
+    public float objectsMaxDistance = 5.0f;
 
     public float objectsMinY = -1.4f;
     public float objectsMaxY = 1.4f;
@@ -93,6 +93,7 @@ public class GeneratorScript : MonoBehaviour
     {
         int randomIndex = Random.Range(0, availableObstacles.Length);
         GameObject obstacle = (GameObject)Instantiate(availableObstacles[randomIndex]);
+
         float objectPositionX = lastObjectX + Random.Range(objectsMinDistance, objectsMaxDistance);
         float randomY = Random.Range(objectsMinY, objectsMaxY);
 
@@ -107,6 +108,7 @@ public class GeneratorScript : MonoBehaviour
     {
         int randomIndex = Random.Range(0, availableCoins.Length);
         GameObject coin = (GameObject)Instantiate(availableCoins[randomIndex]);
+
         float objectPositionX = lastObjectX + Random.Range(objectsMinDistance, objectsMaxDistance);
         float randomY = Random.Range(objectsMinY, objectsMaxY);
 

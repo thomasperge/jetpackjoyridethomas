@@ -57,16 +57,15 @@ public class MouseController : MonoBehaviour
 
     IEnumerator UpdateMetterLabel()
     {
-        while (true)
+        while (isDead == false)
         {
-            // Attendre 0.1 seconde
             yield return new WaitForSeconds(0.1f);
-            
-            // Ajouter 5 à metter et mettre à jour le label
-            metter += 5;
-            metterLabel.text = metter.ToString();
+            metter += 1;
+
+            metterLabel.text = Mathf.FloorToInt(metter).ToString("D4");
         }
     }
+
 
     public void RestartGame()
     {
@@ -142,7 +141,7 @@ public class MouseController : MonoBehaviour
     void CollectCoin(Collider2D coinCollider)
     {
         coins++;
-        coinsCollectedLabel.text = coins.ToString();
+        coinsCollectedLabel.text = Mathf.FloorToInt(coins).ToString("D3");
         Destroy(coinCollider.gameObject);
     }
 
