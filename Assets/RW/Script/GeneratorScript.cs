@@ -14,8 +14,8 @@ public class GeneratorScript : MonoBehaviour
     public List<GameObject> currentObstacles;
     public List<GameObject> currentCoins;
 
-    public float objectsMinDistance = 2.0f;
-    public float objectsMaxDistance = 5.0f;
+    public float objectsMinDistance;
+    public float objectsMaxDistance;
 
     public float objectsMinY = -1.4f;
     public float objectsMaxY = 1.4f;
@@ -161,7 +161,7 @@ public class GeneratorScript : MonoBehaviour
 
         if (farthestObjectX < addObjectX)
         {
-            if (Random.value > 0.5f)
+            if (Random.value > 0.65f)
             {
                 AddObstacle(farthestObjectX);
             }

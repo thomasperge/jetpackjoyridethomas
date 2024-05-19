@@ -31,8 +31,9 @@ public class MouseController : MonoBehaviour
     private uint metter = 0;
     public Text metterLabel;
 
-    public Button restartButton;
-    public Button startButton;
+    public Canvas scoreGameScene;
+    public Canvas restartScene;
+    public Canvas startScene;
 
     // Start is called before the first frame update
     void Start()
@@ -41,18 +42,22 @@ public class MouseController : MonoBehaviour
         mouseAnimator = GetComponent<Animator>();
         AdjustJetpack(false);
 
+        restartScene.gameObject.SetActive(false);
+        startScene.gameObject.SetActive(true);
+
         jetpackForce = 0.0f;
         forwardMovementSpeed = 0.0f;
     }
 
     public void StartGame()
     {
-        jetpackForce = 20.0f;
+        jetpackForce = 23.0f;
         forwardMovementSpeed = 5f;
         startTime = Time.time;
         targetSpeed = forwardMovementSpeed;
 
-        startButton.gameObject.SetActive(false);
+        scoreGameScene.gameObject.SetActive(true);
+        startScene.gameObject.SetActive(false);
         StartCoroutine(UpdateMetterLabel());
         gameStarted = true;
     }
@@ -97,7 +102,24 @@ public class MouseController : MonoBehaviour
 
             if (isDead && isGrounded)
             {
-                restartButton.gameObject.SetActive(true);
+                Transform coinsCollected = restartScene.transform.Find("Score/coin/coinsCollected");
+                Transform meterCollected = restartScene.transform.Find("Score/meter/meterCollected");
+                
+                if (coinsCollected != null && meterCollected != null)
+                {
+                    Text coinsText = coinsCollected.GetComponent<Text>();
+                    coinsText.text = Mathf.FloorToInt(coins).ToString("D3");
+
+                    Text meterText = meterCollected.GetComponent<Text>();
+                    meterText.text = Mathf.FloorToInt(metter).ToString("D4");
+                }
+                else
+                {
+                    Debug.LogError("Coins collected text not found!");
+                }
+
+                scoreGameScene.gameObject.SetActive(false);
+                restartScene.gameObject.SetActive(true);
             }
         }
     }
@@ -114,7 +136,7 @@ public class MouseController : MonoBehaviour
         jetpackEmission.enabled = !isGrounded;
         if (jetpackActive)
         {
-            jetpackEmission.rateOverTime = 75.0f;
+            jetpackEmission.rateOverTime = 125.0f;
         }
         else
         {
