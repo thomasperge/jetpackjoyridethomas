@@ -1146,6 +1146,7 @@ MonoBehaviour:
   - {fileID: 7973401402101899474, guid: 236177e015fcbef47a6470b0558f94d7, type: 3}
   - {fileID: 7973401402101899474, guid: 9f73fc3e21aad1141a4b2e16661ac784, type: 3}
   - {fileID: 7973401402101899474, guid: 7811104016aaeae4e84b83fd5b4167ca, type: 3}
+  - {fileID: 6152780022230067803, guid: 743451bc202ebf4469c575ca7a36dacb, type: 3}
   currentObstacles:
   - {fileID: 5505853126822046393, guid: 9bf139eee39cabb47a8eb021ed63c61b, type: 3}
   currentCoins:

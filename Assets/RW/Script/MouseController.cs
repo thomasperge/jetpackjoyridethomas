@@ -51,6 +51,11 @@ public class MouseController : MonoBehaviour
         forwardMovementSpeed = 0.0f;
     }
 
+    public void OnAnimationEvent()
+    {
+        Debug.Log("Animation event triggered!");
+    }
+
     public void StartGame()
     {
         jetpackForce = 23.0f;
@@ -169,7 +174,7 @@ public class MouseController : MonoBehaviour
     {
         coins++;
         coinsCollectedLabel.text = Mathf.FloorToInt(coins).ToString("D3");
-        Destroy(coinCollider.gameObject);
+        DestroyImmediate(coinCollider.gameObject);
     }
 
     // Update is called once per frame

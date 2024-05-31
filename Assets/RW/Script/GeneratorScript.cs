@@ -80,7 +80,7 @@ public class GeneratorScript : MonoBehaviour
         foreach (var room in roomsToRemove)
         {
             currentRooms.Remove(room);
-            Destroy(room);
+            DestroyImmediate(room);
         }
 
         if (addRooms)
@@ -138,7 +138,7 @@ public class GeneratorScript : MonoBehaviour
         foreach (var obj in objectsToRemove)
         {
             currentObstacles.Remove(obj);
-            Destroy(obj);
+            DestroyImmediate(obj);
         }
 
         objectsToRemove.Clear();
@@ -156,7 +156,7 @@ public class GeneratorScript : MonoBehaviour
         foreach (var obj in objectsToRemove)
         {
             currentCoins.Remove(obj);
-            Destroy(obj);
+            DestroyImmediate(obj);
         }
 
         if (farthestObjectX < addObjectX)
