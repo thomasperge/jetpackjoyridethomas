@@ -34,6 +34,7 @@ public class MouseController : MonoBehaviour
     public Canvas scoreGameScene;
     public Canvas restartScene;
     public Canvas startScene;
+    public Canvas pauseScene;
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +45,7 @@ public class MouseController : MonoBehaviour
 
         restartScene.gameObject.SetActive(false);
         startScene.gameObject.SetActive(true);
+        pauseScene.gameObject.SetActive(false);
 
         jetpackForce = 0.0f;
         forwardMovementSpeed = 0.0f;
@@ -58,6 +60,7 @@ public class MouseController : MonoBehaviour
 
         scoreGameScene.gameObject.SetActive(true);
         startScene.gameObject.SetActive(false);
+        pauseScene.gameObject.SetActive(false);
         StartCoroutine(UpdateMetterLabel());
         gameStarted = true;
     }
