@@ -35,6 +35,7 @@ public class MouseController : MonoBehaviour
     public Canvas restartScene;
     public Canvas startScene;
     public Canvas pauseScene;
+    public Canvas finishScene;
 
     // Start is called before the first frame update
     void Start()
@@ -46,9 +47,11 @@ public class MouseController : MonoBehaviour
         restartScene.gameObject.SetActive(false);
         startScene.gameObject.SetActive(true);
         pauseScene.gameObject.SetActive(false);
+        finishScene.gameObject.SetActive(false);
 
         jetpackForce = 0.0f;
         forwardMovementSpeed = 0.0f;
+        Time.timeScale = 1f;
     }
 
     public void StartGame()
@@ -61,8 +64,11 @@ public class MouseController : MonoBehaviour
         scoreGameScene.gameObject.SetActive(true);
         startScene.gameObject.SetActive(false);
         pauseScene.gameObject.SetActive(false);
+        finishScene.gameObject.SetActive(false);
+
         StartCoroutine(UpdateMetterLabel());
         gameStarted = true;
+        Time.timeScale = 1f;
     }
 
     IEnumerator UpdateMetterLabel()
@@ -73,9 +79,14 @@ public class MouseController : MonoBehaviour
             metter += 1;
 
             metterLabel.text = Mathf.FloorToInt(metter).ToString("D4");
+
+            if (Mathf.FloorToInt(metter) >= 1000)
+            {
+                finishScene.gameObject.SetActive(true);
+                Time.timeScale = 0f;
+            }
         }
     }
-
 
     public void RestartGame()
     {
